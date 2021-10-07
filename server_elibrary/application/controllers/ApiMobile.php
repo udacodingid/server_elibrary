@@ -108,6 +108,43 @@ defined('BASEPATH') OR exit('No Script Direct');
       echo json_encode($data);	
  }
 
+//  SELECT * from tb_readers_book, tb_user, tb_library_books WHERE tb_readers_book.id_user_reader - tb_user.id_user 
+// AND tb_readers_book.id_book = tb_library_books.id_library_books 
+// AND
+// tb_readers_book.id_user_reader = 2
+ function historyBacaBuku(){
+
+    $id_user_reader              = $this->input->post('id_user_reader');
+    $q = $this->db->query("SELECT * from tb_readers_book, tb_user, tb_library_books WHERE tb_readers_book.id_user_reader - tb_user.id_user AND tb_readers_book.id_book = tb_library_books.id_library_books 
+AND tb_readers_book.id_user_reader = '$id_user_reader'");
+
+    // $q = $this->db->get('SELECT * FROM tb_readers_book WHERE id_user_reader = 2');
+
+    if ($q->num_rows() > 0) {
+        $data['message'] = 'success';
+        $data['status'] = 200;
+        $data['data'] = $q->result();
+    } else {
+        $data['message'] = 'error';
+        $data['status'] = 404;
+     }
+     echo json_encode($data);
+}
+
+function getHistoryBuku(){
+    $q = $this->db->get('SELECT * FROM tb_readers_book WHERE id_user_reader = 2');
+    if($q->num_rows()>0){
+        $data['message'] = "Success get data";
+        $data['status'] = 200;
+        $data['data']= $q->result();
+    }else{
+        $data['message'] = "Failed get data";
+        $data['status'] = 404;
+    }
+
+    echo json_encode($data);
+}
+
  function updateCloseTimeReader(){
     $uuid_file = $this->input->post('uuid_file');
     $close_bookAt             = $this->input->post('close_bookAt');
